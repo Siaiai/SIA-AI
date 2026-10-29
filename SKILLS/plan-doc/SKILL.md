@@ -96,9 +96,13 @@ description: >
 | `/plan-change <描述> [--doc <路径>]` | 记录 C 变更并更新受影响任务                   |
 | `/plan-check [--doc <路径>]`    | 跑 lint，汇总 ERROR / WARN            |
 | `/plan-enter <lead/exec> [--doc <路径>]` | 进入角色：lead 接 `/plan-next`，exec 接 `/plan-done` |
-| `/plan-tidy [--format / --all] [--doc <路径>]` | 整理文档；`--format` 同步格式、`--all` 两者 |
+| `/plan-tidy [--format / --all] [--doc <路径>]` | 整理文档；默认合并去重，`--format` 同步格式、`--all` 两者 |
 
 `/plan-enter` 只进入角色：规划AI 用 `/plan-next` 出提示词，执行AI 完成后由规划AI 用 `/plan-done` 收尾。
+
+`/plan-req --doc <外部笔记>`：按 `references/obsidian.md` 读入笔记 → 登记 R + `文档` 列 + 拆任务；未传 `--doc` 时行为不变；笔记缺失不猜，提示补。
+
+`/plan-done` 时若该 R 有 `文档`：回写外部笔记——勾待办项；该 R 全部任务完成才置完成并写 `完成时间`，未全完成只置进行；笔记缺失或找不到待办项记 WARN，不猜。
 
 命令未加载时，按 `references/tasks.md` 中的同名流程手工执行。
 
