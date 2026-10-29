@@ -284,6 +284,41 @@ function Test-PlanFile {
         }
     }
 
+    $r0 = Get-SectionRange $secs 0 $lines.Count
+    if ($r0[0] -ge 0) {
+        $reqStart = -1
+        for ($i = $r0[0]; $i -le $r0[1]; $i++) {
+            if (-not $inFence[$i] -and -not $inComment[$i] -and $lines[$i] -match '^###\s*需求登记') { $reqStart = $i; break }
+        }
+        if ($reqStart -ge 0) {
+            $docCol = -1
+            for ($i = $reqStart + 1; $i -le $r0[1]; $i++) {
+                if ($inFence[$i] -or $inComment[$i]) { continue }
+                if ($lines[$i] -match '^#{1,3}\s') { break }
+                if ($lines[$i] -notmatch '^\s*\|') { continue }
+                $cells = $lines[$i].Trim().Trim('|').Split('|')
+                $names = @($cells | ForEach-Object { $_.Trim().Trim('`') })
+                if ($docCol -lt 0) {
+                    for ($j = 0; $j -lt $names.Count; $j++) {
+                        if ($names[$j] -eq '文档') { $docCol = $j; break }
+                    }
+                    if ($docCol -ge 0) { continue }
+                    continue
+                }
+                if (($cells | Where-Object { $_ -match '^\s*:?-{3,}:?\s*$' }).Count -gt 0) { continue }
+                if ($docCol -ge $cells.Count) { continue }
+                $v = $cells[$docCol].Trim().Trim('`').Trim('"').Trim("'")
+                if (-not $v -or $v -eq '—' -or $v -eq '-') { continue }
+                if ($v -match '^\!?\[\[') { continue }
+                if ($v -notmatch '\.md|[\\/]') { continue }
+                $targetPath = if ([IO.Path]::IsPathRooted($v)) { $v } else { Join-Path (Split-Path -Parent $File) $v }
+                if (-not (Test-Path -LiteralPath $targetPath)) {
+                    Add-Issue 'WARN' 'DOC-009' $File ($i + 1) "document link not found: $v"
+                }
+            }
+        }
+    }
+
     if (-not $lastUpdate -and $null -ne $fm) {
         $u = Get-FmText $fm 'updated'
         if ($u -match '^(\d{4}-\d{2}-\d{2})') { $lastUpdate = $Matches[1] }
