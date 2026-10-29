@@ -47,7 +47,8 @@ description: >
 ## 文件位置
 
 - 默认：项目根 `PLAN.md`；也可用 `docs/plan.md` 或用户指定路径
-- 命令优先用显式路径；未指定时按 `PLAN.md` → `docs/plan.md` → 最近修改的 `*.plan.md` 查找
+- 定位顺序：`--doc <路径>` → 第一个参数是存在的 `.md`（旧写法） → `AGENTS.md` 指针 → `PLAN.md` → `docs/plan.md` → 最近 `*.plan.md`（Obsidian 取最近含 `plan-doc:v1` 标记的笔记）
+- 多文档命中：列出候选并询问，不猜
 - 如果目标文件位于 Obsidian vault 内：位置按该 vault 规范（如 `{领域}/{项目}/YYMMDD{任务}.md`），笔记属性参考 vault 的 `规范.md` / 模板（映射见 `references/obsidian.md`）；否则使用本 skill 的通用格式
 - 本 skill 不要求任何特定属性名；通用格式只有 `title / status / created / updated`
 
@@ -78,14 +79,16 @@ description: >
 
 ## 命令
 
+主对象在前（需求 / 任务ID / 描述），`--doc <路径>` 可选；未传时按「文件位置」的定位顺序查找，多文档命中先询问。
+
 | 命令                       | 作用                                |
 | ------------------------ | --------------------------------- |
-| `/plan-new <路径> <标题>`    | **初始化**：读代码 + 建基线 / 机制 / 索引，不规划需求 |
-| `/plan-req <文档> <需求>`    | **随时新增需求**（唯一需求入口）                |
-| `/plan-next <文档或任务ID>`   | 只读，输出下一条任务的执行提示词                  |
-| `/plan-done <文档> <任务ID>` | 审 diff、验证、更新三处；默认判断提交（`--commit` / `--no-commit`） |
-| `/plan-change <文档> <描述>` | 记录 C 变更并更新受影响任务                   |
-| `/plan-check <文档或目录>`    | 跑 lint，汇总 ERROR / WARN            |
+| `/plan-new <标题> [--doc <路径>]`    | **初始化**：读代码 + 建基线 / 机制 / 索引，不规划需求 |
+| `/plan-req <需求> [--doc <路径>]`    | **随时新增需求**（唯一需求入口）                |
+| `/plan-next [<任务ID>] [--doc <路径>]`   | 只读，输出下一条任务的执行提示词                  |
+| `/plan-done <任务ID> [--doc <路径>] [--commit / --no-commit]` | 审 diff、验证、更新三处；默认判断提交 |
+| `/plan-change <描述> [--doc <路径>]` | 记录 C 变更并更新受影响任务                   |
+| `/plan-check [--doc <路径>]`    | 跑 lint，汇总 ERROR / WARN            |
 
 命令未加载时，按 `references/tasks.md` 中的同名流程手工执行。
 
