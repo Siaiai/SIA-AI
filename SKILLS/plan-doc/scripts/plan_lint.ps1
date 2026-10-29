@@ -447,6 +447,42 @@ function Test-PlanFile {
         }
     }
 
+    $dDefs = @{}
+    if ($r4[0] -ge 0) {
+        for ($i = $r4[0]; $i -le $r4[1]; $i++) {
+            if ($inFence[$i] -or $inComment[$i]) { continue }
+            if ($lines[$i] -match '^\|\s*(D\d+)\s*\|') { $dDefs[$Matches[1]] = $i + 1 }
+        }
+    }
+
+    $r1 = Get-SectionRange $secs 1 $lines.Count
+    if ($r1[0] -ge 0) {
+        $reportedD = @{}
+        for ($i = $r1[0]; $i -le $r1[1]; $i++) {
+            if ($inFence[$i] -or $inComment[$i]) { continue }
+            foreach ($m in [regex]::Matches($lines[$i], '\bD\d+\b')) {
+                $did = $m.Value
+                if (-not $dDefs.ContainsKey($did) -and -not $reportedD.ContainsKey($did)) {
+                    $reportedD[$did] = $true
+                    Add-Issue 'WARN' 'REF-001' $File ($i + 1) "reference $did has no definition in 决策"
+                }
+            }
+        }
+        if ($cDefs.Count -eq 0) {
+            $reportedC = @{}
+            for ($i = $r1[0]; $i -le $r1[1]; $i++) {
+                if ($inFence[$i] -or $inComment[$i]) { continue }
+                foreach ($m in [regex]::Matches($lines[$i], '\bC\d+\b')) {
+                    $cid = $m.Value
+                    if (-not $reportedC.ContainsKey($cid)) {
+                        $reportedC[$cid] = $true
+                        Add-Issue 'WARN' 'REF-002' $File ($i + 1) "reference $cid has no definition in 变更记录"
+                    }
+                }
+            }
+        }
+    }
+
     $i = 0
     while ($i -lt $lines.Count) {
         if ($inFence[$i] -or $inComment[$i] -or $lines[$i] -notmatch '^\s*\|') { $i++; continue }

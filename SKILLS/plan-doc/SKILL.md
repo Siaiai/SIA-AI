@@ -52,6 +52,12 @@ description: >
 - 如果目标文件位于 Obsidian vault 内：位置按该 vault 规范（如 `{领域}/{项目}/YYMMDD{任务}.md`），笔记属性参考 vault 的 `规范.md` / 模板（映射见 `references/obsidian.md`）；否则使用本 skill 的通用格式
 - 本 skill 不要求任何特定属性名；通用格式只有 `title / status / created / updated`
 
+## 方案单一入口
+
+- 方案只放规划文档 §3；任务行只保留摘要；不另建方案文档
+- 用户可改 §3；规划AI 以 §3 为准，`/plan-next` 先复述方案差异，冲突记 C，不覆盖用户编辑
+- 方案讨论：规划AI 给 1–3 个选项，用户确认后落 §3
+
 ## 单一事实源（冲突优先级）
 
 1. 目标仓库的 `AGENTS.md` / `README.md`
