@@ -206,7 +206,11 @@
 ### 时刻 7｜换会话 / 换 AI ——【发给新AI】
 
 ```text
-你是（规划AI / 执行AI）。加载 skill plan-doc，读规划文档 <路径>。
+加载 skill plan-doc。用 /plan-enter 进入角色，读规划文档 <路径>。
+
+规划AI：/plan-enter lead --doc <路径>
+执行AI：/plan-enter exec --doc <路径>
+
 先自报角色：规划AI 只出提示词、不做实现；执行AI 只做一条、不改规划文档。
 
 事实源：代码 > 测试 > README/AGENTS > §0 看板。
@@ -285,6 +289,8 @@
 | `/plan-done <任务ID> [--doc <路径>] [--commit / --no-commit]` | 时刻 3 | 审 diff、验证、更新 §5/§6/§0；默认判断提交 |
 | `/plan-change <描述> [--doc <路径>]` | 时刻 4 | 记变更 |
 | `/plan-check [--doc <路径>]` | 时刻 8 | 校验 |
+| `/plan-enter <lead/exec> [--doc <路径>]` | 时刻 7 | 进入角色 |
+| `/plan-tidy [--format / --all] [--doc <路径>]` | 时刻 8 / 随时 | 整理文档与格式 |
 
 ### 参数与自动定位
 
@@ -300,6 +306,8 @@
 | `/plan-done` | `<任务ID> [--doc <路径>] [--commit / --no-commit]` | `<路径> <任务ID>` |
 | `/plan-change` | `<描述> [--doc <路径>]` | `<路径> <描述>` |
 | `/plan-check` | `[--doc <路径>]` | `<路径>` |
+| `/plan-enter` | `<lead/exec> [--doc <路径>]` | — |
+| `/plan-tidy` | `[--format / --all] [--doc <路径>]` | — |
 
 ---
 

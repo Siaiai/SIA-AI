@@ -95,6 +95,10 @@ description: >
 | `/plan-done <任务ID> [--doc <路径>] [--commit / --no-commit]` | 审 diff、验证、更新三处；默认判断提交 |
 | `/plan-change <描述> [--doc <路径>]` | 记录 C 变更并更新受影响任务                   |
 | `/plan-check [--doc <路径>]`    | 跑 lint，汇总 ERROR / WARN            |
+| `/plan-enter <lead/exec> [--doc <路径>]` | 进入角色：lead 接 `/plan-next`，exec 接 `/plan-done` |
+| `/plan-tidy [--format / --all] [--doc <路径>]` | 整理文档；`--format` 同步格式、`--all` 两者 |
+
+`/plan-enter` 只进入角色：规划AI 用 `/plan-next` 出提示词，执行AI 完成后由规划AI 用 `/plan-done` 收尾。
 
 命令未加载时，按 `references/tasks.md` 中的同名流程手工执行。
 
