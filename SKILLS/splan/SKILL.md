@@ -51,6 +51,13 @@ description: >
 
 验证归属：命令由执行AI 跑并在回报给命令 + 结果；人工由用户按步骤确认；未确认不勾 `[x]`。规划AI 不重跑，只审 diff / 文档 + 跑 Splan lint。
 
+## 分支策略（D19）
+
+- 执行AI 仅在用户明确要求时，基于当前分支新建 `<type>/<T#-#>-<任务简称>`；未指定则留在当前分支。
+- `type` ∈ feature / bugfix / docs / refactor / chore。
+- dirty / 非 git：执行AI 先停并报告，不新建分支。
+- 规划AI 在当前分支提交；不自动 merge / push：merge 需显式要求，push 禁止。
+
 ## 何时用
 
 - 新建或维护项目规划：`PLAN.md`、`docs/plan.md`、`*.plan.md`，或用户指定的任意路径
