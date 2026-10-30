@@ -15,6 +15,24 @@ description: >
 
 > **怎么用**：读 `references/sop.md`（使用手册）。里面是"什么时候发什么提示词"的时刻表，全部可复制。
 
+## 启动自检
+
+加载本 skill 后、开始任务前先做一次命令注册自检；同一会话已通过可跳过。自检失败只提示，不阻断后续。
+
+1. **判断当前工具**（按优先级；不猜）：
+   - 用户 / 命令参数显式指定：`/splan <tool>`、`-Target <tool>`
+   - 运行环境 / 进程特征：`CLAUDECODE`、`OPENCODE`、`CURSOR`、`CODEX`、`GEMINI`、`COPILOT`、`WINDSURF`、`CLINE`、`ROO`、`CONTINUE`
+   - skill 安装路径：`.../.claude/skills/` → claude；`.../.config/opencode/skills/` → opencode
+   - 项目级目录：`.github` → copilot、`.windsurf` → windsurf、`.clinerules` → cline、`.roo` → roo、`.continue` → continue
+   - 仍无法判断：不要猜，提示用户用 `/splan <tool>` 或 `install_commands.ps1 -Target <tool>`
+   - 工具：claude / opencode / cursor / codex / copilot / windsurf / cline / roo / continue / gemini
+2. **检查目标目录**：对应 command 目录应有 8 个 `splan-*.md`：`splan-new` / `splan-req` / `splan-next` / `splan-done` / `splan-change` / `splan-check` / `splan-enter` / `splan-tidy`。比对数量与文件名。
+3. **缺失 / 不一致**：运行
+   `powershell -NoProfile -ExecutionPolicy Bypass -File "<skill目录>\scripts\install_commands.ps1" -Target <tool>`
+   项目级工具加 `-Project <项目根>`；自定义目录用 `-Target <目录>`。
+4. **告知用户**：`检测到 <tool> → <目录>，已安装 <N>/8 个`；补装 / 修复了哪些一并说明。
+5. **失败不阻断**：安装失败、无权限或检测不到工具时，输出目标目录、错误摘要和手动命令，继续当前任务；只补缺失，不删除用户已有命令。
+
 ## 角色与边界
 
 加载本 skill 后先自报角色：**规划AI** 或 **执行AI**，再按各自边界干活。
@@ -89,6 +107,7 @@ description: >
 
 | 命令                       | 作用                                |
 | ------------------------ | --------------------------------- |
+| `/splan [tool]`          | **引导入口**：自检命令注册、安装缺失命令；`tool` 缺省 auto |
 | `/splan-new <标题> [--doc <路径>]`    | **初始化**：读代码 + 建基线 / 机制 / 索引，不规划需求 |
 | `/splan-req <需求> [--doc <路径>]`    | **随时新增需求**（唯一需求入口）                |
 | `/splan-next [<任务ID>] [--doc <路径>]`   | 只读，输出下一条任务的执行提示词                  |
@@ -131,6 +150,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "<skill目录>\scripts\plan_
 ## 安装与加载
 
 - Skill：`~/.claude/skills/splan/`（Claude）或 `~/.config/opencode/skills/splan/`（opencode）
+- 入口：`/splan [tool]`；自检命令注册并补齐 8 个 `splan-*.md`，`tool` 缺省 auto
 - 命令：运行 `scripts/install_commands.ps1`（`-Target auto` 自动检测；symlink 优先，失败回退复制），或手动复制 `commands/splan-*.md` 到对应工具的 command 目录
 - 命令目录：Claude `~/.claude/commands/`；opencode `~/.config/opencode/command/`；其他工具见 `INSTALL.md`
 - 新增 / 修改 skill 或 command 后重启对应工具

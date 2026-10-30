@@ -24,9 +24,9 @@ if (-not (Test-Path -LiteralPath $SourceDir)) {
     throw "commands directory not found: $SourceDir"
 }
 
-$files = @(Get-ChildItem -LiteralPath $SourceDir -Filter 'splan-*.md' -File)
+$files = @(Get-ChildItem -LiteralPath $SourceDir -Filter 'splan*.md' -File)
 if ($files.Count -eq 0) {
-    throw "no splan-*.md files found in $SourceDir"
+    throw "no splan*.md files found in $SourceDir"
 }
 
 $HomeDir = $env:USERPROFILE
