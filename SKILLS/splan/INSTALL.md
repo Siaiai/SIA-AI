@@ -4,7 +4,7 @@
 
 - Claude Code：`~/.claude/skills/splan/`
 - opencode：`~/.config/opencode/skills/splan/`
-- 其他工具：按该工具的 skill / instructions 目录放置，保持 `SKILL.md` + `references/` + `commands/` + `scripts/`
+- 其他工具：按该工具的 skill / instructions 目录放置，保持 `SKILL.md` + `references/` + `commands/` + `scripts/` + `assets/`
 
 ## 2. 注册命令
 
@@ -39,7 +39,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install_commands.ps1
 安装后运行 `/splan`（引导入口）：
 
 ```text
-/splan            # 缺省 auto：检测当前工具并自检 / 补齐 8 个 splan-*.md
+/splan            # 缺省 auto：检测当前工具并自检 / 补齐 8 个任务命令 + 入口 splan.md
 /splan opencode   # 指定工具
 /splan D:\my-tool\commands   # 指定命令目录
 ```
