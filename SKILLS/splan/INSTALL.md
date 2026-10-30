@@ -46,7 +46,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install_commands.ps1
 
 - 输出格式：`检测到 <tool> → <dir>，已安装 N 个`
 - `auto` 检测到多个工具时逐个输出；检测不到工具时不猜，提示改用 `/splan <tool>` 或 `install_commands.ps1 -Target <tool>`
-- 只补缺失、不删除已有命令；安装失败不阻断后续，可手动执行脚本
+- 缺失 / 不一致时覆盖同步（同名以仓库为准），不删除其它命令；安装失败不阻断后续，可手动执行脚本
 - 完成后按提示进入：规划AI 用 `/splan-enter`，执行AI 用 `/splan-next` 生成自包含提示词
 
 ## 4. 工具目录

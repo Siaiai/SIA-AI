@@ -32,7 +32,7 @@ description: >
    `powershell -NoProfile -ExecutionPolicy Bypass -File "<skill目录>\scripts\install_commands.ps1" -Target <tool>`
    项目级工具加 `-Project <项目根>`；自定义目录用 `-Target <目录>`。
 4. **告知用户**：`检测到 <tool> → <目录>，已安装 <N>/8 个`；补装 / 修复了哪些一并说明。
-5. **失败不阻断**：安装失败、无权限或检测不到工具时，输出目标目录、错误摘要和手动命令，继续当前任务；只补缺失，不删除用户已有命令。
+5. **失败不阻断**：安装失败、无权限或检测不到工具时，输出目标目录、错误摘要和手动命令，继续当前任务；缺失 / 不一致时覆盖同步（同名以仓库为准），不删除其它命令。
 
 ## 角色与边界
 
@@ -158,7 +158,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "<skill目录>\scripts\plan_
 ## 安装与加载
 
 - Skill：`~/.claude/skills/splan/`（Claude）或 `~/.config/opencode/skills/splan/`（opencode）
-- 入口：`/splan [tool]`；自检命令注册并补齐 8 个 `splan-*.md`，`tool` 缺省 auto
-- 命令：运行 `scripts/install_commands.ps1`（`-Target auto` 自动检测；symlink 优先，失败回退复制），或手动复制 `commands/splan-*.md` 到对应工具的 command 目录
+- 入口：`/splan [tool]`；自检命令注册并同步 8 个 `splan-*.md`，`tool` 缺省 auto
+- 命令：运行 `scripts/install_commands.ps1`（`-Target auto` 自动检测；symlink 优先，失败回退复制；缺失 / 不一致时覆盖同步，同名以仓库为准，不删除其它命令），或手动复制 `commands/splan-*.md` 到对应工具的 command 目录
 - 命令目录：Claude `~/.claude/commands/`；opencode `~/.config/opencode/command/`；其他工具见 `INSTALL.md`
 - 新增 / 修改 skill 或 command 后重启对应工具
