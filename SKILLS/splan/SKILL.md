@@ -1,15 +1,15 @@
 ---
-name: plan-doc
+name: splan
 description: >
   Maintain long-lived project planning documents (plan / task table / implementation log /
   change log) in any repository or folder. Use when the user creates or updates PLAN.md,
   docs/plan.md, *.plan.md, asks 下一步做什么 / 这条做完了 / 需求变了 / 检查规划, or invokes
-  /plan-new, /plan-next, /plan-done, /plan-change, /plan-check. Plain Markdown with no
+  /splan-new, /splan-next, /splan-done, /splan-change, /splan-check. Plain Markdown with no
   Obsidian dependency. Covers task IDs, P0/P1 ordering, change log (C IDs), one-line
   implementation records, archiving, and lint. Do NOT use for one-off edits or pure Q&A.
 ---
 
-# plan-doc — 长期规划文档工作流
+# Splan — 长期规划文档工作流
 
 用于「一个项目跨多天、多任务、需求会变」的规划文档。纯 Markdown，不依赖 Obsidian 或任何笔记软件；放在哪个仓库、哪个目录都可以。
 
@@ -26,11 +26,11 @@ description: >
 
 规划AI 只写规划文档并出提示词；执行AI 只改代码并回报，不动规划文档。越界反例见 `references/pitfalls.md`（角色越界）。
 
-提交归属：规划AI 在 `/plan-done` 审 diff、核对验证、更新文档后按默认规则判断提交（本任务文件 + 验证通过 + 文档更新 + lint 0）；`--commit` 强制提交、`--no-commit` 跳过；执行AI 不提交；push 永不自动。
+提交归属：规划AI 在 `/splan-done` 审 diff、核对验证、更新文档后按默认规则判断提交（本任务文件 + 验证通过 + 文档更新 + lint 0）；`--commit` 强制提交、`--no-commit` 跳过；执行AI 不提交；push 永不自动。
 
 执行AI 回报只给事实（改了什么 / 验证 / 行为 / §5 / 遗留），下一步由规划AI 定。
 
-验证归属：命令由执行AI 跑并在回报给命令 + 结果；人工由用户按步骤确认；未确认不勾 `[x]`。规划AI 不重跑，只审 diff / 文档 + 跑 plan-doc lint。
+验证归属：命令由执行AI 跑并在回报给命令 + 结果；人工由用户按步骤确认；未确认不勾 `[x]`。规划AI 不重跑，只审 diff / 文档 + 跑 Splan lint。
 
 ## 何时用
 
@@ -38,11 +38,11 @@ description: >
 - 从规划文档领任务、写实施记录、收尾归档
 - 需求变更，任务取消 / 取代 / 延期
 - 用户说：下一步做什么、这条做完了、需求变了、检查规划
-- 调用 `/plan-*` 命令
+- 调用 `/splan-*` 命令
 
 不适用：一次性小改动、纯问答、写文章。
 
-需求随时可加：用 `/plan-req`。不要求一次想清楚——不明确就先记 `状态=待澄清`，生成一条带时盒、"产出=结论"的探索任务，后面再转实现。入口只有需求登记表 / 假设。
+需求随时可加：用 `/splan-req`。不要求一次想清楚——不明确就先记 `状态=待澄清`，生成一条带时盒、"产出=结论"的探索任务，后面再转实现。入口只有需求登记表 / 假设。
 
 ## 文件位置
 
@@ -55,7 +55,7 @@ description: >
 ## 方案单一入口
 
 - 方案只放规划文档 §3；任务行只保留摘要；不另建方案文档
-- 用户可改 §3；规划AI 以 §3 为准，`/plan-next` 先复述方案差异，冲突记 C，不覆盖用户编辑
+- 用户可改 §3；规划AI 以 §3 为准，`/splan-next` 先复述方案差异，冲突记 C，不覆盖用户编辑
 - 方案讨论：规划AI 给 1–3 个选项，用户确认后落 §3
 
 ## 单一事实源（冲突优先级）
@@ -80,7 +80,7 @@ description: >
 7. 需求变更必须落到某个 R，并打到五个面：任务、契约、测试、文档、机制。
 8. 每次会话结束更新三处：§0 状态、§1 下一条、§5 一行记录。
 9. 一功能一机制：优先扩展现有机制；新建机制必须先立 D 决策，执行中发现要新建必须停下。
-10. 不删改无关文件；不碰 `.git/`；执行AI 不 commit / push；规划AI 在 `/plan-done` 默认判断提交（本任务文件 + 验证通过 + 文档更新 + lint 0），`--commit` 强制、`--no-commit` 跳过，push 禁止。
+10. 不删改无关文件；不碰 `.git/`；执行AI 不 commit / push；规划AI 在 `/splan-done` 默认判断提交（本任务文件 + 验证通过 + 文档更新 + lint 0），`--commit` 强制、`--no-commit` 跳过，push 禁止。
 11. 改完必须更新文档；没更新文档的"完成"不算完成（§5 一行 + §6 归档 + §0 同步）。
 
 ## 命令
@@ -89,20 +89,20 @@ description: >
 
 | 命令                       | 作用                                |
 | ------------------------ | --------------------------------- |
-| `/plan-new <标题> [--doc <路径>]`    | **初始化**：读代码 + 建基线 / 机制 / 索引，不规划需求 |
-| `/plan-req <需求> [--doc <路径>]`    | **随时新增需求**（唯一需求入口）                |
-| `/plan-next [<任务ID>] [--doc <路径>]`   | 只读，输出下一条任务的执行提示词                  |
-| `/plan-done <任务ID> [--doc <路径>] [--commit / --no-commit]` | 审 diff、验证、更新三处；默认判断提交 |
-| `/plan-change <描述> [--doc <路径>]` | 记录 C 变更并更新受影响任务                   |
-| `/plan-check [--doc <路径>]`    | 跑 lint，汇总 ERROR / WARN            |
-| `/plan-enter <lead/exec> [--doc <路径>]` | 进入角色：lead 接 `/plan-next`，exec 接 `/plan-done` |
-| `/plan-tidy [--format / --all] [--doc <路径>]` | 整理文档；默认合并去重，`--format` 同步格式、`--all` 两者 |
+| `/splan-new <标题> [--doc <路径>]`    | **初始化**：读代码 + 建基线 / 机制 / 索引，不规划需求 |
+| `/splan-req <需求> [--doc <路径>]`    | **随时新增需求**（唯一需求入口）                |
+| `/splan-next [<任务ID>] [--doc <路径>]`   | 只读，输出下一条任务的执行提示词                  |
+| `/splan-done <任务ID> [--doc <路径>] [--commit / --no-commit]` | 审 diff、验证、更新三处；默认判断提交 |
+| `/splan-change <描述> [--doc <路径>]` | 记录 C 变更并更新受影响任务                   |
+| `/splan-check [--doc <路径>]`    | 跑 lint，汇总 ERROR / WARN            |
+| `/splan-enter [--doc <路径>]` | 进入规划AI：复述阶段 / 下一条 / 活跃变更；不实现 |
+| `/splan-tidy [--format / --all] [--doc <路径>]` | 整理文档；默认合并去重，`--format` 同步格式、`--all` 两者 |
 
-`/plan-enter` 只进入角色：规划AI 用 `/plan-next` 出提示词，执行AI 完成后由规划AI 用 `/plan-done` 收尾。
+`/splan-enter` 只指定规划AI；执行AI 直接用 `/splan-next` 的自包含提示词，完成后由规划AI 用 `/splan-done` 收尾。
 
-`/plan-req --doc <外部笔记>`：按 `references/obsidian.md` 读入笔记 → 登记 R + `文档` 列 + 拆任务；未传 `--doc` 时行为不变；笔记缺失不猜，提示补。
+`/splan-req --doc <外部笔记>`：按 `references/obsidian.md` 读入笔记 → 登记 R + `文档` 列 + 拆任务；未传 `--doc` 时行为不变；笔记缺失不猜，提示补。
 
-`/plan-done` 时若该 R 有 `文档`：回写外部笔记——勾待办项；该 R 全部任务完成才置完成并写 `完成时间`，未全完成只置进行；笔记缺失或找不到待办项记 WARN，不猜。
+`/splan-done` 时若该 R 有 `文档`：回写外部笔记——勾待办项；该 R 全部任务完成才置完成并写 `完成时间`，未全完成只置进行；笔记缺失或找不到待办项记 WARN，不猜。
 
 命令未加载时，按 `references/tasks.md` 中的同名流程手工执行。
 
@@ -114,14 +114,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "<skill目录>\scripts\plan_
 
 - ERROR：必须修完才能继续
 - WARN：可以接受，但回复里要逐条说明原因
-- `/plan-done`、`/plan-change`、`/plan-check` 收尾必须跑一次
+- `/splan-done`、`/splan-change`、`/splan-check` 收尾必须跑一次
 - 文档含 `<!-- plan-doc:v1 -->` 标记才启用严格检查；旧文档自动降级为兼容模式（只报 WARN）
 - 目录扫描加 `-PlanOnly` 只检查含该标记的规划文档；显式传文件总是检查
 
 ## 参考文件
 
 - `references/sop.md`：**使用手册**——什么时候发什么提示词（人读这个）
-- `assets/plan-template.md`：创建模板（/plan-new 使用）
+- `assets/plan-template.md`：创建模板（/splan-new 使用）
 - `references/recon.md`：初始化侦察清单（读代码 → 基线 / 机制 / 索引）
 - `references/format.md`：文档骨架、任务行、机制登记、变更规则
 - `references/tasks.md`：任务粒度、ID、验收、拆分、变更操作流
@@ -130,5 +130,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "<skill目录>\scripts\plan_
 
 ## 安装与加载
 
-- 放在 `~/.config/opencode/skills/plan-doc/`，或用 `skills.paths` 指向本目录
-- 新增或修改 skill / command 后需要重启 opencode 才生效
+- Skill：`~/.claude/skills/splan/`（Claude）或 `~/.config/opencode/skills/splan/`（opencode）
+- 命令：运行 `scripts/install_commands.ps1`（`-Target auto` 自动检测；symlink 优先，失败回退复制），或手动复制 `commands/splan-*.md` 到对应工具的 command 目录
+- 命令目录：Claude `~/.claude/commands/`；opencode `~/.config/opencode/command/`；其他工具见 `INSTALL.md`
+- 新增 / 修改 skill 或 command 后重启对应工具

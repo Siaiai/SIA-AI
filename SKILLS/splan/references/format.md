@@ -1,15 +1,15 @@
 # 规划文档格式 v1
 
-> 本文件是 plan-doc skill 的格式事实源。纯 Markdown，不绑定 Obsidian。
+> 本文件是 Splan skill 的格式事实源。纯 Markdown，不绑定 Obsidian。
 > 在 Obsidian vault 内可按 `references/obsidian.md` 补属性。
-> 创建文档用 `assets/plan-template.md`；`/plan-new` 先按 `references/recon.md` 读仓库，再建基线 / 机制 / 索引，需求留空。
+> 创建文档用 `assets/plan-template.md`；`/splan-new` 先按 `references/recon.md` 读仓库，再建基线 / 机制 / 索引，需求留空。
 > 怎么用见 `sop.md`。
 
 文档正文第一行放 `<!-- plan-doc:v1 -->`，lint 见到该标记才启用严格检查。
 
 ## 需求随时可加
 
-不区分项目类型。文档建好后，需求用 `/plan-req` 随时追加，也可以直接写需求登记表。
+不区分项目类型。文档建好后，需求用 `/splan-req` 随时追加，也可以直接写需求登记表。
 
 - 需求清楚 → `状态=待做`，拆任务
 - 需求不明确 → `状态=待澄清`，先放一条探索任务（时盒 / 产出=结论 / 停止条件）
@@ -87,7 +87,7 @@ updated: 2026-01-01
 - `来源`：立项 / 客户 / 调研 / 现场问题
 - `状态`：待做 / 待澄清 / 交付 / 变更 / 取消
 - `覆盖任务`：哪些 T 在实现它
-- `文档`（可选）：外部任务笔记，wikilink 或路径；空 / `—` 表示不同步。有值 → `/plan-req` 读入、`/plan-done` 回写；无值保持现行为
+- `文档`（可选）：外部任务笔记，wikilink 或路径；空 / `—` 表示不同步。有值 → `/splan-req` 读入、`/splan-done` 回写；无值保持现行为
 - 每条任务必须挂 `需求：R#`；变更必须落到某个 R
 
 **需求只有一个入口：这张表**。不要在聊天里提需求指望 AI 记住。
@@ -169,7 +169,7 @@ graph LR
 方案只放本小节，不另建方案文档；任务行只保留摘要。
 
 - 用户可直接改 §3；规划AI 以 §3 为准，不覆盖用户编辑
-- `/plan-next` 出提示词前先复述 §3 与任务的方案差异；冲突记 C
+- `/splan-next` 出提示词前先复述 §3 与任务的方案差异；冲突记 C
 - 方案讨论：规划AI 给 1–3 个选项，用户确认后落 §3
 
 ## 4. 决策与变更
@@ -210,7 +210,7 @@ graph LR
 结果只有 4 个：`完成 / 取消 / 取代 / 延期`。
 
 - `关联` 列写 `← C3` 或 `→ T1-9`
-- `提交` 列写短 hash 或 `—`；规划AI 在 /plan-done 默认判断提交（本任务文件 + 验证通过 + 文档更新 + lint 0），`--commit` 强制、`--no-commit` 跳过，执行AI 不提交，push 禁止
+- `提交` 列写短 hash 或 `—`；规划AI 在 /splan-done 默认判断提交（本任务文件 + 验证通过 + 文档更新 + lint 0），`--commit` 强制、`--no-commit` 跳过，执行AI 不提交，push 禁止
 - 归档行原文保留，不删不改
 
 ## 图示（Mermaid，可选）
@@ -254,4 +254,4 @@ graph LR
 1. 补 frontmatter
 2. 顶部加 `## 0. 看板`
 3. 正文首行加 `<!-- plan-doc:v1 -->`
-4. 跑 /plan-check，按 ERROR 修
+4. 跑 /splan-check，按 ERROR 修
