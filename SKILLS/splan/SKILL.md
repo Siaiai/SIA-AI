@@ -1,5 +1,6 @@
 ---
 name: splan
+version: 1.0.0
 description: >
   Maintain long-lived project planning documents (plan / task table / implementation log /
   change log) in any repository or folder. Use when the user creates or updates PLAN.md,
